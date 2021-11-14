@@ -47,7 +47,7 @@ class Friend:
             b = sum(self._second.interests.get(category).get(str(item)))
             total += (a-b)**2
         total /= len(overlap_items)
-        return 10.0 - math.sqrt(total)
+        return math.sqrt(total)
 
     def _GetDefProx(self)->float:
         categories = ["Movies", "Music", "Sports", "Food", "Travel"]

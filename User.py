@@ -37,6 +37,3 @@ class User:
 
     def DeleteOpinion(self, opinion: Opinion) -> None:
         del self._interests_[opinion.category][opinion.item]
-
-
-    
