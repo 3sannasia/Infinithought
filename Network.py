@@ -64,11 +64,3 @@ class Network:
     def FindMatch(self, current_user, category):
         pass
 
-
-    
-
-    
-
-
-
-    
