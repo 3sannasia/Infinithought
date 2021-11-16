@@ -9,7 +9,7 @@ class Opinion:
         self.category = str(category)   #initializing the category data member of the opinion object
         self.item = str(item)           #initializing item data member of the opinion object
         self.rating = int(rating)       #initializing the rating data member of the opinion object
-
+# COULD THROW EXCEPTION IF RATING ABOVE 10 AND LESS THAN 0 AND IF CATEGORY INVALID
 
 # Each node in the social network will be represented as a user object
 class User:
