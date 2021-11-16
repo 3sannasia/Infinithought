@@ -47,7 +47,7 @@ class Friend:
         overlap_items = [value for value in u1_items if value in u2_items]
         
         if (len(overlap_items) == 0):
-            return 11.0
+            return 12.0
 
         total = 0
         
@@ -64,7 +64,7 @@ class Friend:
         valid = 0
         for cat in categories:
             prox = self._GetProx(cat)
-            if (prox != 11.0):
+            if (prox != 12.0):
                 valid += 1
                 total += prox
 

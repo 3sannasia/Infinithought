@@ -1,8 +1,8 @@
 import networkx as nx
-from networkx.classes.function import all_neighbors
 from Friend import Friend
 from User import Opinion, User
 import database
+from MatchAlg import MatchAlgorithm
 from random import Random
 
 class Network:
@@ -100,7 +100,19 @@ class Network:
 
     # Wrapper for executing the match algorithm.
     def FindMatch(self, current_user, category):
-        pass
+        # 1. Get a list of tuples :- (User, Dijkstra's Distance)
+        dijkstra_list = MatchAlgorithm.GetDijkstraList(self._netwk, category, current_user)
+        # 2. Identify at least 8 items such that they are taken from complete concentric distances
+        potential_matches = MatchAlgorithm.GetPotentialMatches(dijkstra_list, current_user, category)
+        # 3. Change the Dijkstra's Distance to Weightage using the MAX - Dist.
+        weighted_dict = MatchAlgorithm.GetWeightedDict(dijkstra_list)
+        # 4. Create a dictionary of those items that map to lists
+        sum_dict = MatchAlgorithm.GetSumDict(weighted_dict, potential_matches, category)
+        # 5. Walk the list again, for every "User" store the user's rating * Weightage for everything in the map
+        # 6. Iterate throuh the map and turn all lists into a peentage rating
+        # 7. Return top. 
+        best_match = MatchAlgorithm.GetBestMatch(sum_dict)
+        return best_match
 
     
 
