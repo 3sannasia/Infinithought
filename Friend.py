@@ -8,7 +8,6 @@ class Friend:
         self._friendId = int(fid)
         self._first = u1
         self._second = u2
-        self.FindProximity()
     
     @property
     def users(self)->List:
@@ -21,6 +20,16 @@ class Friend:
     @property
     def proximity(self)->Dict:
         return self._prox
+
+    def AddProximity(self, movies, music, sports, food, travel, default) -> None:
+        self._prox = {
+            "Movies" : movies,
+            "Music" : music,
+            "Sports" : sports,
+            "Food" : food,
+            "Travel" : travel,
+            "Default" : default
+        }
 
     def FindProximity(self)->None:
         self._prox = {
@@ -64,22 +73,22 @@ class Friend:
         else:
             return total/valid
         
-u1 = User(123)
-u2 = User(234)
-o1 = Opinion("Movies", "A", 3)
-o2 = Opinion("Movies", "B", 3)
-o2k = Opinion("Movies", "B", 10)
-o3 = Opinion("Movies", "C", 4)
-o4 = Opinion("Movies", "D", 4)
-u1.AddOpinion(o1)
-u1.AddOpinion(o2)
-u1.AddOpinion(o3)
-u2.AddOpinion(o2k)
-u2.AddOpinion(o3)
-u2.AddOpinion(o4)
-f = Friend(123, u1, u2)
-print(f.proximity["Movies"])
-print(f.proximity["Default"])
+# u1 = User(123)
+# u2 = User(234)
+# o1 = Opinion("Movies", "A", 3)
+# o2 = Opinion("Movies", "B", 3)
+# o2k = Opinion("Movies", "B", 10)
+# o3 = Opinion("Movies", "C", 4)
+# o4 = Opinion("Movies", "D", 4)
+# u1.AddOpinion(o1)
+# u1.AddOpinion(o2)
+# u1.AddOpinion(o3)
+# u2.AddOpinion(o2k)
+# u2.AddOpinion(o3)
+# u2.AddOpinion(o4)
+# f = Friend(123, u1, u2)
+# print(f.proximity["Movies"])
+# print(f.proximity["Default"])
 
 
 
