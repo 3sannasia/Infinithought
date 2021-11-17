@@ -5,25 +5,26 @@ import database
 
 
 
+# Repository of Opinions
+o1 = Opinion("Movies", "Lion King", 2)
+o2 = Opinion("Movies", "Lion King", 6)
+o3 = Opinion("Movies", "Lion King", 10)
 
+o4 = Opinion("Movies", "Matilda", 2)
+o5 = Opinion("Movies", "Matilda", 6)
+o6 = Opinion("Movies", "Matilda", 10)
 
+o7 = Opinion("Movies", "The Kissing Booth", 2)
+o8 = Opinion("Movies", "The Kissing Booth", 6)
+o9 = Opinion("Movies", "The Kissing Booth", 10)
+
+o10 = Opinion("Movies", "Avatar", 2)
+o11 = Opinion("Movies", "Avatar", 6)
+o12 = Opinion("Movies", "Avatar", 10)
+
+# Populates database and Network
 def demo1()->None:
-    # Repository of Opinions
-    o1 = Opinion("Movies", "Lion King", 2)
-    o2 = Opinion("Movies", "Lion King", 6)
-    o3 = Opinion("Movies", "Lion King", 10)
-
-    o4 = Opinion("Movies", "Matilda", 2)
-    o5 = Opinion("Movies", "Matilda", 6)
-    o6 = Opinion("Movies", "Matilda", 10)
-
-    o7 = Opinion("Movies", "The Kissing Booth", 2)
-    o8 = Opinion("Movies", "The Kissing Booth", 6)
-    o9 = Opinion("Movies", "The Kissing Booth", 10)
-
-    o10 = Opinion("Movies", "Avatar", 2)
-    o11 = Opinion("Movies", "Avatar", 6)
-    o12 = Opinion("Movies", "Avatar", 10)
+    
 
     # Refresh Database
     database.delete_all_tables()
@@ -34,9 +35,6 @@ def demo1()->None:
 
     # Add User function
     # Changes should be reflected in network and all database tables
-
-
-    # Add Users
     network.AddUser("password1", [o1, o4, o7])
     network.AddUser("password2", [o2, o5, o8])
     network.AddUser("password3", [o3, o6, o9])
@@ -55,6 +53,14 @@ def demo1()->None:
     network.AddUser("password16", [o3, o5, o9])
     network.AddUser("password17", [o9, o12, o4])
 
+    network.Draw()
+
+# Reads from the database, makes changes that are reflected in the database and the Network
+def demo2()->None:
+
+    # Creating a network object
+    network = Network()
+
     # Delete User
     network.DeleteUser(5)
     network.DeleteUser(3)
@@ -66,42 +72,40 @@ def demo1()->None:
     u7 = network.GetUser(7)
     u8 = network.GetUser(8)
     u11 = network.GetUser(11)
+    print("Movie Proximity for 4-6 and 4-7:")
     print(network.MakeFriend(u4, u6).proximity["Movies"])
     print(network.MakeFriend(u4, u7).proximity["Movies"])
     network.AddOpinion(u4, o6)
+    print("Movie Proximity for 4-6 and 4-7 after opinion is added:")
     print(network.network[u4][u6]["friend"].proximity["Movies"])
     print(network.network[u4][u7]["friend"].proximity["Movies"])
 
+
     #Remove opinion from user
     network.RemoveOpinion(u4, o6)
+    print("Movie Proximity for 4-6 and 4-7 after opinion is added:")
     print(network.network[u4][u6]["friend"].proximity["Movies"])
     print(network.network[u4][u7]["friend"].proximity["Movies"])
 
     # Make Friend and UnFriend
+    print("Friends of 4")
+    print(list(network.network.adj[u4]))
     network.MakeFriend(u6, u4)
     network.MakeFriend(u8, u4)
     network.MakeFriend(u8, u11)
     network.UnFriend(u4, u6)
+    print("Friends of 4 after execution")
     print(list(network.network.adj[u4]))
     print(u6)
     print(u8)
-
+    
+    print("Find Match for User4:")
     print(network.FindMatch(u4,"Movies"))
-    network.Draw()
 
     
-def demo2()->None:
-    
-    # populates the network object from the database.
-    network = Network()
-    u4 = network.GetUser(4)
-    u6 = network.GetUser(6)
-    u7 = network.GetUser(7)
-    print(network.MakeFriend(u4, u6).proximity["Movies"])
-    print(network.MakeFriend(u4, u7).proximity["Movies"])
-    network.Draw()
 
 # Demo Execution
 
 demo1()
 demo2()
+
