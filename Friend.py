@@ -9,7 +9,7 @@ class Friend:
         self._friendId = int(fid)                         # Initializes the friendID of the Friend
         self._first = u1                                  # Initializes the source connection of the Friend edge to first user passed
         self._second = u2                                 # Initializes the destination of the connection of the Friend edge to the second user passed
-        self.FindProximity()                              # NOT SURE WHAT THIS IS DOING (is it a dictionary of proximities?)
+        self.FindProximity()                              # Calculates the proximity between the the two users connected by this "friend" edge
     
     # Returns array of the first and second user that are connected by this Friend object edge
     @property
@@ -39,7 +39,6 @@ class Friend:
 
     # Calculates the proximity of the specific category passed into it
     def _GetProx(self, category)->float:
-        # SHOULD WE CHECK IF CATEGORY IS VALID?
         default_proximity = 11.0
         u1_items = self._first.interests.get(category).keys()
         u2_items = self._second.interests.get(category).keys()
@@ -47,7 +46,7 @@ class Friend:
         
         if (len(overlap_items) == 0):     #if no overlap in items between User 1 and User 2 in the friend relationship, default proximity assigned
             return default_proximity
-
+        
         total = 0
         
         # Calculates proximity by taking into account the items shared by User 1 and User 2

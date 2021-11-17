@@ -49,11 +49,9 @@ class User:
     # Adds an Opinion object to the _interests_ dictionary data member of the User node into the specific category specified in the oOpinion object
     # Void function
     def AddOpinion(self, opinion : Opinion) -> None:
-        # SHOULD WE CHECK IF NOT A VALID CATEGORY
         self._interests_[opinion.category][opinion.item] = [opinion.rating] 
 
     # Deletes the passed Opinion object from the the _interests_ dictionary data member of the User node
     # Void function
     def DeleteOpinion(self, opinion: Opinion) -> None:
-        # SHOULD WE CHECK IF OPINION DOESNT EXIST
         del self._interests_[opinion.category][opinion.item]
