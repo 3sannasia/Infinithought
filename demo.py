@@ -2,6 +2,11 @@ from Network import Network
 from User import Opinion
 import database
 
+
+
+
+
+
 def demo1()->None:
     # Repository of Opinions
     o1 = Opinion("Movies", "Lion King", 2)
@@ -84,6 +89,7 @@ def demo1()->None:
     print(network.FindMatch(u4,"Movies"))
     network.Draw()
 
+    
 def demo2()->None:
     
     # populates the network object from the database.
@@ -95,7 +101,7 @@ def demo2()->None:
     print(network.MakeFriend(u4, u7).proximity["Movies"])
     network.Draw()
 
+# Demo Execution
+
+demo1()
 demo2()
-
-# database.get_opinions_for_user(1)
-
