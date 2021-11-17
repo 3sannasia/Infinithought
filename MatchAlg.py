@@ -66,14 +66,11 @@ class MatchAlgorithm:
 
     def GetWeightedDict(dijkstra_dict:dict)->dict:
         
-        dijkstra_list = list(dijkstra_dict.values())
-        max_value = 0.0
-        for item in dijkstra_list:
-            if item > max_value:
-                max_value = item
+        max_value = max(dijkstra_dict.values())
         
-        for item in dijkstra_dict:
-            dijkstra_dict[item] = max_value - item
+        dijkstra_keys = list(dijkstra_dict.keys())
+        for item in dijkstra_keys:
+            dijkstra_dict[item] = max_value - dijkstra_dict[item]
         
         return dijkstra_dict
 
@@ -84,21 +81,33 @@ class MatchAlgorithm:
             sum_dict[match] = []
             for user in users:
                 if match in list(user.interests[category].keys()):
-                    weight = weighted_dict[user]
-                    sum_dict[match].append(float(weight * user.interests[category][match]))
+                    weight:float = weighted_dict[user]
+                    sum_dict[match].append(weight * float(user.interests[category][match][0]))
         
         return sum_dict
 
     def GetBestMatch(sum_dict:dict)->list:
-        for item in sum_dict:
-            
-        pass
+        matches = list(sum_dict.keys())
+        best_match = None
+        max_score = 0
+        for match in matches:
+            match_sum:list = sum_dict[match]
+            if len(match_sum) == 0:
+                break
+            else:
+                score = sum(match_sum) / len(match_sum)
+            if score > max_score:
+                best_match = match
+                max_score = score
+        
+        return best_match
 
 
 
-    g = nx.Graph()
-    g.add_node(1)
-    g.add_node(2)
-    g.add_node(3)
-    g.add_edge(1,2)
-    print(node_connected_component(g, 2))
+
+    # g = nx.Graph()
+    # g.add_node(1)
+    # g.add_node(2)
+    # g.add_node(3)
+    # g.add_edge(1,2)
+    # print(node_connected_component(g, 2))

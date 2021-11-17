@@ -37,7 +37,6 @@ class User:
     @property
     def interests(self) -> Dict:
         return self._interests_
-
     # Adds an Opinion object to the _interests_ dictionary data member of the User node into the specific category specified in the oOpinion object
     # Void function
     def AddOpinion(self, opinion : Opinion) -> None:

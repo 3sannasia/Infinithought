@@ -3,40 +3,40 @@ from typing import List
 from User import Opinion, User
 from Friend import Friend
 
+
 #------------------THIS IS TO CREATE THE TABLES -----------------------
 
 
-
-
 #Create 3 Tables
+def make_tables()->None:
+    conn = sqlite3.connect('socialnetwork.db')
+    c = conn.cursor()
 
-# conn = sqlite3.connect('socialnetwork.db')
-# c = conn.cursor()
-
-# c.execute("""CREATE TABLE users (
-#        User_id INTEGER,
-#        password text
-#    )""")
+    c.execute("""CREATE TABLE users (
+       User_id INTEGER,
+       password text)""")
 
     
-# c.execute("""CREATE TABLE opinions (
-#        User_id INTEGER,
-#        category text,
-#        item text,
-#        rating INTEGER
-#    )""")
+    c.execute("""CREATE TABLE opinions (
+       User_id INTEGER,
+       category text,
+       item text,
+       rating INTEGER
+    )""")
 
-# c.execute("""CREATE TABLE friends (
-#        Friend_id INTEGER,
-#        user1_id INTEGER,
-#        user2_id INTEGER,
-#        Movie_proximity REAL,
-#        Music_proximity REAL,
-#        Sports_proximity REAL,
-#        Food_proximity REAL,
-#        Travel_proximity REAL,
-#        default_proximity REAL
-#    )""")
+    c.execute("""CREATE TABLE friends(
+        Friend_id INTEGER,
+        user1_id INTEGER,
+        user2_id INTEGER,
+        Movie_proximity REAL,
+        Music_proximity REAL,
+        Sports_proximity REAL,
+        Food_proximity REAL,
+        Travel_proximity REAL,
+        default_proximity REAL
+    )""")
+
+
 
 #-------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ def get_all_users()->List:
 
     for item in items:
         u = User(int(item))
-        opinions = get_opinions_for_user(int(item))
+        opinions = get_opinions_for_user(int(item[1]))
         for opinion in opinions:
             u.AddOpinion(opinion)
         users.append(u)
@@ -126,7 +126,7 @@ def add_user_to_users(user:User, password):
 def delete_user_from_users (user_id) :
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("DELETE from users WHERE User_id = (?)", (user_id))
+    c.execute("DELETE from users WHERE User_id = (?)", (user_id,))
     #commit our command
     conn.commit()
     #close connection
@@ -150,6 +150,8 @@ def add_friendship_to_friends( f:Friend ):
     Travel_proximity = f.proximity["Travel"]
     default_proximity = f.proximity["Default"]
 
+    delete_friendship_only_userids (user1_id, user2_id)
+
     # Creates the cursor and stuff
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
@@ -163,7 +165,7 @@ def add_friendship_to_friends( f:Friend ):
 def delete_friendship_from_friends (friend_id) :
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("DELETE from users WHERE Friend_id = (?)", (friend_id,))
+    c.execute("DELETE from friends WHERE Friend_id = (?)", (friend_id,))
     #commit our command
     conn.commit()
     #close connection
@@ -172,7 +174,7 @@ def delete_friendship_from_friends (friend_id) :
 def delete_friendship_only_userids (user1, user2):
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("DELETE from users WHERE (user1_id = (?) OR user1_id = (?)) AND (user2_id = (?) OR user2_id = (?))", (user1,user2,user1,user2))
+    c.execute("DELETE from friends WHERE (user1_id = (?) AND user2_id = (?)) OR (user1_id = (?) AND user2_id = (?))", (user1,user2,user2,user1))
     #commit our command
     conn.commit()
     #close connection
@@ -181,7 +183,7 @@ def delete_friendship_only_userids (user1, user2):
 def delete_friendship_only_one_userid (user1):
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("DELETE from users WHERE (user1_id = (?) OR user2_id = (?))", (user1,user1))
+    c.execute("DELETE from friends WHERE (user1_id = (?) OR user2_id = (?))", (user1,user1))
     #commit our command
     conn.commit()
     #close connection
@@ -229,7 +231,7 @@ def get_all_friends():
 
 def add_opinion_to_opinions(User_id,opinion:Opinion):
     
-    delete_opinion_from_opinions(opinion)
+    delete_opinion_from_opinions_for_user(opinion, User_id)
 
     category = opinion.category
     item = opinion.item
@@ -247,16 +249,16 @@ def add_opinion_to_opinions(User_id,opinion:Opinion):
 def delete_opinion_from_opinions (user_id:int) :
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("DELETE from opinions WHERE User_id = (?)", (user_id))
+    c.execute("DELETE from opinions WHERE User_id = (?)", (user_id,))
     #commit our command
     conn.commit()
     #close connection
     conn.close()
 
-def delete_opinion_from_opinions (opinion:Opinion) :
+def delete_opinion_from_opinions_for_user (opinion:Opinion, uid:int) :
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("DELETE from opinions WHERE (category = (?)) AND (item = (?))", (opinion.category, opinion.item))
+    c.execute("DELETE from opinions WHERE (User_id = (?) AND category = (?) AND item = (?))", (uid, opinion.category, opinion.item))
     #commit our command
     conn.commit()
     #close connection
@@ -265,7 +267,7 @@ def delete_opinion_from_opinions (opinion:Opinion) :
 def get_opinions_for_user(user_id):
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("SELECT from opinions WHERE User_id = (?)", (user_id))
+    c.execute("SELECT User_id from opinions WHERE User_id = (?)", (user_id,))
     rows = c.fetchall()
     opinions = []
 
@@ -301,7 +303,7 @@ def get_all_opinions():
 
 #---------------------------------Deleting a table----------
 
-def delete_friend_table():
+def delete_all_tables():
     #Connect to database
     conn = sqlite3.connect('socialnetwork.db')
     #Create a cursor
@@ -309,21 +311,8 @@ def delete_friend_table():
 
     #Query the Database
     c.execute("DROP TABLE friends")
-    
-    #commit our command
-    conn.commit()
-    #close connection
-    conn.close()
-
-def delete_user_table():
-    #Connect to database
-    conn = sqlite3.connect('socialnetwork.db')
-    #Create a cursor
-    c = conn.cursor()
-
-    #Query the Database
     c.execute("DROP TABLE users")
-    
+    c.execute("DROP TABLE opinions")
     #commit our command
     conn.commit()
     #close connection

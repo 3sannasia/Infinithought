@@ -3,7 +3,8 @@ from Friend import Friend
 from User import Opinion, User
 import database
 from MatchAlg import MatchAlgorithm
-from random import Random
+import random
+import matplotlib.pyplot as plt
 
 class Network:
     def __init__(self) -> None:
@@ -11,7 +12,8 @@ class Network:
         self._netwk.add_nodes_from(database.get_all_users())
         all_friends = database.get_all_friends()
         for friend in all_friends:
-            self._netwk.add_edge(friend.users[0], friend.users[1], {"friend" : friend})
+            self._netwk.add_edge(friend.users[0], friend.users[1])
+            self._netwk[friend.users[0]][friend.users[1]]["friend"] = friend
 
     @property
     def network(self)->nx:
@@ -26,11 +28,16 @@ class Network:
         for opinion in listOfOpinions:
             created_user.AddOpinion(opinion)
             database.add_opinion_to_opinions(user_id, opinion)
+        # 3.5. Adds User object to Network as Node
+        self._netwk.add_node(created_user)
         # 4. Stores the user object into the Database
         database.add_user_to_users(created_user, loginInfo)
         # 5. Finds a friend for the user
         all_users = list(self._netwk.nodes)
-        found_friend = all_users[Random.randint(0, len(all_users) - 1)]
+        if len(all_users) == 1:
+            return
+        
+        found_friend = all_users[random.randint(1, len(all_users)-1) - 1]
         # 6. Asks Database for ID for the friend object
         friend_id = database.get_available_friend_id()
         # 7. Creates friend object using ID
@@ -39,7 +46,8 @@ class Network:
         # 8. Stores friend object in the Database
         database.add_friendship_to_friends(friendship)
         # 9. Adds edge to graph
-        self._netwk.add_edge(friendship.users[0], friendship.users[1], {"friend" : friendship})
+        self._netwk.add_edge(friendship.users[0], friendship.users[1])
+        self._netwk[friendship.users[0]][friendship.users[1]]["friend"] = friendship
     
 
     def DeleteUser(self, userId)->None: #test
@@ -64,24 +72,24 @@ class Network:
         # 4. Updates all friend objects in the Database where one of the users is user
         neighbours = list(self._netwk.adj[user])
         for neighbour in neighbours:
-            f = self._netwk[user][neighbour]["friend"]
+            f:Friend = self._netwk[user][neighbour]["friend"]
             f.FindProximity()
             database.add_friendship_to_friends(f)
     
     def RemoveOpinion(self, user:User, opinion:Opinion)->None: #test
         # 1. Removes Opinion from the Opinion Table of the Database
-        database.delete_opinion_from_opinions(opinion)
+        database.delete_opinion_from_opinions_for_user(opinion, user.userID)
         # 2. Removes Opinion to the User Object in the Network
         user.DeleteOpinion(opinion)
         # 3. Updates Proximity values for all adjacent friend objects
         # 4. Updates all friend objects in the Database where one of the users is user
         neighbours = list(self._netwk.adj[user])
         for neighbour in neighbours:
-            f = self._netwk[user][neighbour]["friend"]
+            f:Friend = self._netwk[user][neighbour]["friend"]
             f.FindProximity()
             database.add_friendship_to_friends(f)
 
-    def MakeFriend(self, user1, user2)->None: #test
+    def MakeFriend(self, user1, user2)->Friend: #test
         # 1. Asks Database for ID for the friend object
         friend_id = database.get_available_friend_id()
         # 2. Creates friend object using ID
@@ -90,7 +98,9 @@ class Network:
         # 3. Adds friend object to database
         database.add_friendship_to_friends(friendship)
         # 4. Creates edge between the users in the Graph
-        self._netwk.add_edge(user1, user2, {"friend" : friendship})
+        self._netwk.add_edge(user1, user2)
+        self._netwk[user1][user2]["friend"] = friendship
+        return friendship
     
     def UnFriend(self, user1, user2)->None: #test
         # 1. Deletes Friend from Database
@@ -105,7 +115,9 @@ class Network:
         # 2. Identify at least 8 items such that they are taken from complete concentric distances
         potential_matches = MatchAlgorithm.GetPotentialMatches(dijkstra_list, current_user, category)
         # 3. Change the Dijkstra's Distance to Weightage using the MAX - Dist.
+        
         weighted_dict = MatchAlgorithm.GetWeightedDict(dijkstra_list)
+        
         # 4. Create a dictionary of those items that map to lists
         sum_dict = MatchAlgorithm.GetSumDict(weighted_dict, potential_matches, category)
         # 5. Walk the list again, for every "User" store the user's rating * Weightage for everything in the map
@@ -113,6 +125,17 @@ class Network:
         # 7. Return top. 
         best_match = MatchAlgorithm.GetBestMatch(sum_dict)
         return best_match
+
+    def Draw(self)->None:
+        nx.draw(self._netwk)
+        plt.savefig("nw.png")
+
+    def GetUser(self, uid:int)->User:
+        users = list(self._netwk.nodes)
+        for user in users:
+            if (user.userID == uid):
+                return user
+    
 
     
 
