@@ -2,5 +2,4 @@
 final-project-infinithought created by GitHub Classroom
 
 Hello, this is the final project for CS128.
-This is now edited in the dev branch by Ayaan!
-Ayaan strikes again!
+The main branch contains all the updates as of the submission of milestone 2.
