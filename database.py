@@ -100,7 +100,7 @@ def get_all_users()->List:
     users = []
 
     for item in items:
-        u = User(int(item))
+        u = User(int(item[1]))
         opinions = get_opinions_for_user(int(item[1]))
         for opinion in opinions:
             u.AddOpinion(opinion)
@@ -206,7 +206,7 @@ def get_all_friends():
     users = get_all_users()
     user_dict = {}
     for user in users:
-        users[user.userID] = user
+        user_dict[user.userID] = user
 
     # Creates a list of all friend objects
     friends = []
@@ -267,7 +267,7 @@ def delete_opinion_from_opinions_for_user (opinion:Opinion, uid:int) :
 def get_opinions_for_user(user_id):
     conn = sqlite3.connect('socialnetwork.db')
     c = conn.cursor()
-    c.execute("SELECT User_id from opinions WHERE User_id = (?)", (user_id,))
+    c.execute("SELECT User_id, category, item, rating FROM opinions WHERE User_id = (?)", (user_id,))
     rows = c.fetchall()
     opinions = []
 
