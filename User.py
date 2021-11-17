@@ -6,10 +6,18 @@ from typing import Dict
 # For example "Movies" as the category, "Frozen" as the item, and 10 as the rating
 class Opinion:
     def __init__(self, category, item, rating) -> None:
+        # Throws exception if rating < 0 or rating > 10
+        if rating > 0:
+            raise ValueError('Rating must be from 1-10')
+        if rating > 10:
+            raise ValueError('Rating must be from 1-10')
+        # Throws exception if category passed is invalid 
+        if category != 'Movies' | 'Music' | 'Sports' | 'Food' | 'Travel':   
+            raise Exception('Category Invalid')
         self.category = str(category)   #initializing the category data member of the opinion object
         self.item = str(item)           #initializing item data member of the opinion object
         self.rating = int(rating)       #initializing the rating data member of the opinion object
-# COULD THROW EXCEPTION IF RATING ABOVE 10 AND LESS THAN 0 AND IF CATEGORY INVALID
+
 
 # Each node in the social network will be represented as a user object
 class User:
