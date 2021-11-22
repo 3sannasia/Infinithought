@@ -7,12 +7,12 @@ from typing import Dict
 class Opinion:
     def __init__(self, category, item, rating) -> None:
         # Throws exception if rating < 0 or rating > 10
-        if rating > 0:
+        if rating < 0:
             raise ValueError('Rating must be from 1-10')
         if rating > 10:
             raise ValueError('Rating must be from 1-10')
         # Throws exception if category passed is invalid 
-        if category != 'Movies' | 'Music' | 'Sports' | 'Food' | 'Travel':   
+        if category != "Movies" and category != "Music" and category != "Sports" and category != "Food" and category != "Travel":   
             raise Exception('Category Invalid')
         self.category = str(category)   #initializing the category data member of the opinion object
         self.item = str(item)           #initializing item data member of the opinion object
@@ -45,6 +45,7 @@ class User:
     @property
     def interests(self) -> Dict:
         return self._interests_
+
     # Adds an Opinion object to the _interests_ dictionary data member of the User node into the specific category specified in the oOpinion object
     # Void function
     def AddOpinion(self, opinion : Opinion) -> None:
