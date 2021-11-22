@@ -16,3 +16,8 @@ Running the test suite:
 There are test files corresponding to each class in our social network program. Our catch2 equivalent in python is the Unit Testing Framework that is part of the Python Documentation below:
 https://docs.python.org/3/library/unittest.html
 
+To run the test suite files:
+python -m unittest tests/test_something.py 
+
+To run the entire test suite:
+
