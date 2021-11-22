@@ -44,7 +44,7 @@ class FriendTestMethods(unittest.TestCase):
     def test_find_proximity(self):
         self.assertEqual(friend_relationship1.proximity["Movies"], 4.949747468305833)
         self.assertEqual(friend_relationship1.proximity["Default"], 4.949747468305833)
-        self.assertEqual(friend_relationship1.proximity["Default"], 11.0)
+        self.assertEqual(friend_relationship1.proximity["Default"], 12.0)
         self.assertEqual(friend_relationship2.proximity["Sports"], 0.0)
 
 if __name__ == '__main__':
