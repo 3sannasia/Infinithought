@@ -36,9 +36,6 @@ class FriendTestMethods(unittest.TestCase):
     friend_relationship2 = Friend(123, u1, u2)
     print(friend_relationship2.proximity["Sports"])
 
-
-
-
     def test_data_members(self):
         self.assertEqual(self._first, user1)
         self.assertEqual(self._second, user2)
@@ -50,23 +47,5 @@ class FriendTestMethods(unittest.TestCase):
         self.assertEqual(friend_relationship1.proximity["Default"], 11.0)
         self.assertEqual(friend_relationship2.proximity["Sports"], 0.0)
 
-#TO BE FINISHED 
-
 if __name__ == '__main__':
     unittest.main()
-
-
-
-#     u1 = User(123)
-# u2 = User(234)
-# o1 = Opinion("Movies", "A", 3)
-# o2 = Opinion("Movies", "B", 3)
-# o2k = Opinion("Movies", "B", 10)
-# o3 = Opinion("Movies", "C", 4)
-# o4 = Opinion("Movies", "D", 4)
-# u1.AddOpinion(o1)
-# u1.AddOpinion(o2)
-# u1.AddOpinion(o3)
-# u2.AddOpinion(o2k)
-# u2.AddOpinion(o3)
-# u2.AddOpinion(o4)68
