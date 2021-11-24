@@ -1,0 +1,10 @@
+ul,li{
+    display:inline
+
+}
+a{
+    border:solid coral 5px;
+    padding:2px;
+    background-color: aqua;
+    color:whitesmoke;
+}
