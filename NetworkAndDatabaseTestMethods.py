@@ -92,19 +92,19 @@ class NetworkAndDatabaseTestMethods(unittest.TestCase):
         friend_relationship1 = Friend(1, user1, user2)
         self.assertEqual(database.get_available_friend_id(), 3)
     
-    # def get_all_users(self):
-    #     u1 = User(1)
-    #     network = Network()
-    #     logininfo1 = "password1"
-    #     logininfo2 = "password2"
-    #     opinion1= Opinion("Movies", "Matilda", 2)
-    #     opinion2 = Opinion("Movies", "The Kissing Booth", 2) 
-    #     opinion3 = Opinion("Movies", "Avatar", 10)
-    #     listOfOpinions = [opinion1, opinion2, opinion3]
-    #     network.AddUser(logininfo1, listOfOpinions)
-    #     listOfOpinions = [opinion1, opinion2, opinion3]
-    #     network.AddUser(logininfo2, listOfOpinions)
-    #     self.assertEqual(database.get_all_users, [])
+    def get_all_users(self):
+        network = Network()
+        self.assertEqual(database.get_all_users, [])
+        logininfo1 = "password1"
+        logininfo2 = "password2"
+        opinion1= Opinion("Movies", "Matilda", 2)
+        opinion2 = Opinion("Movies", "The Kissing Booth", 2) 
+        opinion3 = Opinion("Movies", "Avatar", 10)
+        listOfOpinions = [opinion1, opinion2, opinion3]
+        network.AddUser(logininfo1, listOfOpinions)
+        listOfOpinions = [opinion1, opinion2, opinion3]
+        network.AddUser(logininfo2, listOfOpinions)
+        # self.assertEqual(database.get_all_users, [])
 
     def add_users_to_users(self):
         user1 = User(1)
