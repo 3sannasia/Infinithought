@@ -17,7 +17,7 @@ There are test files corresponding to each class in our social network program. 
 https://docs.python.org/3/library/unittest.html
 
 To run the test suite files:
-Run the respective python files using the "Run Python Button" in your respective IDE or you may type the following in the command line:
+Run the respective python files using the "Run Python Button" in your respective IDE (Preferrably VSCode)or you may type the following in the command line:
 python -m unittest tests/test_something.py 
 
 
