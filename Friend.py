@@ -9,10 +9,6 @@ class Friend:
         self._friendId = int(fid)                         # Initializes the friendID of the Friend
         self._first = u1                                  # Initializes the source connection of the Friend edge to first user passed
         self._second = u2                                 # Initializes the destination of the connection of the Friend edge to the second user passed
-<<<<<<< HEAD
-=======
-        self.FindProximity()                              # Calculates the proximity between the the two users connected by this "friend" edge
->>>>>>> e6ead2d1a275813debd9f3cdf3fa9b37367b6e7e
     
     # Returns array of the first and second user that are connected by this Friend object edge
     @property
@@ -57,15 +53,9 @@ class Friend:
         u2_items = self._second.interests.get(category).keys()
         overlap_items = [value for value in u1_items if value in u2_items]
         
-<<<<<<< HEAD
         if (len(overlap_items) == 0):
             return 12.0
 
-=======
-        if (len(overlap_items) == 0):     #if no overlap in items between User 1 and User 2 in the friend relationship, default proximity assigned
-            return default_proximity
-        
->>>>>>> e6ead2d1a275813debd9f3cdf3fa9b37367b6e7e
         total = 0
         
         # Calculates proximity by taking into account the items shared by User 1 and User 2

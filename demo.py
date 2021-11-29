@@ -100,8 +100,8 @@ def demo2()->None:
     print(u8)
     
     print("Find Match for User4:")
-    print(network.FindMatch(u4,"Movies"))
-
+    # print(network.FindMatch(u4,"Movies"))
+    print(network.FindFriend(u4).userID)
     
 
 # Demo Execution

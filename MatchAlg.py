@@ -1,3 +1,4 @@
+from typing import Dict
 import networkx as nx
 from networkx import node_connected_component
 from networkx.algorithms.components.connected import connected_components
@@ -14,6 +15,7 @@ class MatchAlgorithm:
             return f.proximity[category]
         return f.proximity["Default"]
 
+# Returns a dictionary where users are mapped against Dijkstra's Distance
     def GetDijkstraList(graph:nx.Graph, category:str, current_user:User)->dict:
         all_nodes:set = node_connected_component(graph, current_user)
         shortest_path = {}
@@ -101,6 +103,22 @@ class MatchAlgorithm:
                 max_score = score
         
         return best_match
+
+    def GetPotentialFriends(dijkstra_dict:dict, current_user:User, network:nx.Graph)->list:
+        dijkstra_list = list(dijkstra_dict.items())
+        dijkstra_list.sort(key = lambda x: x[1])
+        current_user_friends:list = list(network.adj[current_user])
+        matches = []
+        for item in dijkstra_list:
+            user:User = item[0]
+            if (user in current_user_friends):
+                pass
+            else:
+                matches.append(user)
+            if len(matches) >= 8:
+                break
+
+        return matches
 
 
 
