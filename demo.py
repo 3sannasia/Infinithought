@@ -102,10 +102,27 @@ def demo2()->None:
     print("Find Match for User4:")
     print(network.FindMatch(u4,"Movies"))
 
-    
+def demo3()->None:
+    # Refresh Database
+    database.delete_all_tables()
+    database.make_tables()
+
+    # Creating a network object
+    network = Network()
+
+    try:
+        network.AddUser("password1", [])
+        network.AddUser("password2", [])
+    except:
+        print("DUMMMMASS")
+    print("Yo")
+
+
+
 
 # Demo Execution
 
-demo1()
-demo2()
+# demo1()
+# demo2()
+demo3()
 

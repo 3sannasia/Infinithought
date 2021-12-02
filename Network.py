@@ -109,7 +109,7 @@ class Network:
         self._netwk.remove_edge(user1, user2)
 
     # Wrapper for executing the match algorithm.
-    def FindMatch(self, current_user, category):
+    def FindMatch(self, current_user, category)->str:
         # 1. Get a list of tuples :- (User, Dijkstra's Distance)
         dijkstra_list = MatchAlgorithm.GetDijkstraList(self._netwk, category, current_user)
         # 2. Identify at least 8 items such that they are taken from complete concentric distances
@@ -126,6 +126,17 @@ class Network:
         best_match = MatchAlgorithm.GetBestMatch(sum_dict)
         return best_match
 
+    def FindFriend(self, current_user:User)->str:
+        # 1. Get a map of tuples :- (User, Dijkstra's Distance)
+        dijkstra_map:dict = MatchAlgorithm.GetDijkstraList(self._netwk, "Default", current_user)
+        # 2. 
+        potential_matches:list = MatchAlgorithm.GetPotentialFriends(dijkstra_map, current_user, self._netwk)
+
+        if (len(potential_matches) > 0):
+            return potential_matches[0]
+
+        raise Exception("No Matches found")
+
     def Draw(self)->None:
         nx.draw(self._netwk)
         plt.savefig("nw.png")
@@ -135,15 +146,4 @@ class Network:
         for user in users:
             if (user.userID == uid):
                 return user
-    
-
-    
-
-
-    
-
-    
-
-
-
     

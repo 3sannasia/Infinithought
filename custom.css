@@ -3,8 +3,8 @@ ul,li{
 
 }
 a{
-    border:solid coral 5px;
+    border:solid rgb(255, 127, 80) 5px;
     padding:2px;
     background-color: aqua;
-    color:whitesmoke;
+    color:rgba(245, 245, 245, 0.596)45, 245);
 }

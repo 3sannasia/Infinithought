@@ -3,11 +3,9 @@ import sqlite3
 import os
 from Network import Network
 from User import Opinion
-#import database
-#import json
+import database
 
 currentdirectory = os.path.dirname(os.path.abspath(__file__))
-network = Network()
 
 app = Flask(__name__)
 #app.secret_key="__privatekey__"
@@ -35,8 +33,7 @@ def add_user():
 @app.route("/savedetails_addUser",methods = ["POST","GET"])  
 def saveDetails_addUser():  
     msg = "msg" 
-    if request.method == "POST":  
-        try:  
+    if request.method == "POST":    
             category = request.form["category"]  
             item = request.form["item"]  
             password = request.form["password"]  
@@ -50,11 +47,12 @@ def saveDetails_addUser():
 
             #adding to the network
             o1 = Opinion(category, item, int(rating))  
-#*************   network.AddUser(password,[o1]) ****************** NOT WORKING
-            msg = "User is successfully added!"
-        except:   
-            msg = "We can not add the user to the database" 
-        finally:  
+            network.AddUser(password,[o1])
+
+            #showing the output of user being added and user id
+
+            user_id = int(database.get_available_userid())
+            msg = "User is successfully added! User ID is: " + str(user_id - 1) 
             return render_template("success.html",msg = msg)    
 
 #delete user page
@@ -63,20 +61,38 @@ def delete_user():
     return render_template('Delete_User.html')
 
 
-@app.route("/savedetails_addUser",methods = ["POST","GET"])  
+@app.route("/savedetails_deleteUser",methods = ["POST","GET"])  
 def saveDetails_deleteUser():  
     msg = "msg" 
-    if request.method == "POST":  
-        try:  
+    if request.method == "POST":   
             userid = request.form["user_id"]
 
             #deleting from network to the network  
             network.DeleteUser(int(userid))
-            msg = "User is successfully deleted!"
-        except:   
-            msg = "We can not delete the user from the database" 
-        finally:  
-            return render_template("success.html",msg = msg)  
+            msg = "User: " + userid + " is successfully deleted!"
+            return render_template("success.html",msg = msg) 
+
+#show all user page
+@app.route('/show_users')
+def show_users():
+    return render_template('show_Users.html')
+
+
+@app.route("/savedetails_showUsers",methods = ["POST","GET"])  
+def saveDetails_showUsers():  
+    msg = "" 
+    if request.method == "POST":
+            password = request.form["password"]   
+            list = database.get_all_users()
+            for user in list:
+                msg += "|UserId: " + str(user.userID)  + " |\n"
+            
+            if(msg == ""):
+                msg = "No users have been added"
+            if(password != "password"):
+                msg = "wrong password" 
+            
+            return render_template("success.html",msg = msg)   
     
 #----------------------------------------------------------------------------------------------
 #-------------------------------------------Add and Remove Opinions-----------------------------
@@ -90,27 +106,21 @@ def remove_opinion():
 @app.route("/savedetails_deleteOpinion",methods = ["POST","GET"])  
 def saveDetails_removeOpinion():  
     msg = "msg" 
-    if request.method == "POST":  
-        try:  
+    if request.method == "POST":   
             category = request.form["category"]  
             item = request.form["item"]  
             userid = request.form["user_id"]  
             rating = request.form["rating"]
-
             #checking for right user inputs
             if (int(rating) > 10 or int(rating) < 1):
                 raise ValueError
-            if (category != "Movies" and category != "Sports" or category != "Travel" or category != "Music" or category != "Food"):
+            if (category != "Movies" and category != "Sports" and category != "Travel" and category != "Music" and category != "Food"):
                 raise ValueError
-
             #adding opinion to the network
             u1 = network.GetUser(int(userid))
             o1 = Opinion(category, item, int(rating))  
             network.RemoveOpinion(u1,o1)
-            msg = "Opinion is successfully removed!"
-        except:   
-            msg = "We can not remove the opinion from the database" 
-        finally:  
+            msg = "Opinion is successfully removed! Opinion removed is for UserId: " + userid + " and the opinion category is:" + category
             return render_template("success.html",msg = msg) 
 
 #add opinion page
@@ -123,7 +133,6 @@ def add_opinion():
 def saveDetails_addOpinion():  
     msg = "msg" 
     if request.method == "POST":  
-        try:  
             category = request.form["category"]  
             item = request.form["item"]  
             userid = request.form["user_id"]  
@@ -132,17 +141,36 @@ def saveDetails_addOpinion():
             #checking for right user inputs
             if (int(rating) > 10 or int(rating) < 1):
                 raise ValueError
-            if (category != "Movies" and category != "Sports" or category != "Travel" or category != "Music" or category != "Food"):
+            if (category != "Movies" and category != "Sports" and category != "Travel" and category != "Music" and category != "Food"):
                 raise ValueError
 
             #adding opinion to the network
             u1 = network.GetUser(int(userid))
             o1 = Opinion(category, item, int(rating))  
             network.AddOpinion(u1,o1)
-            msg = "Opinion is successfully added!"
-        except:   
-            msg = "We can not add the opinion to the database" 
-        finally:  
+            msg = "Opinion is successfully added for UserId: " + userid  
+            return render_template("success.html",msg = msg) 
+
+#show all friends page
+@app.route('/show_friends')
+def show_friends():
+    return render_template('show_Friends.html')
+
+
+@app.route("/savedetails_showFriends",methods = ["POST","GET"])  
+def saveDetails_showFriends():  
+    msg = "" 
+    if request.method == "POST":
+            password = request.form["password"]   
+            list = database.get_all_friends()
+            for friend in list:
+                msg += "|UserId: " + str(friend.users[0].userID) + " UserId: " + str(friend.users[1].userID) + " FriendId: " + str(friend.friendID) + "|\n"
+            
+            if(msg == ""):
+                msg = "No friends have been added in the database"
+            if(password != "password"):
+                msg = "wrong password" 
+            
             return render_template("success.html",msg = msg) 
 
 #--------------------------------------------------------------------------------------------------
@@ -158,7 +186,6 @@ def make_friend():
 def saveDetails_makeFriend():  
     msg = "msg" 
     if request.method == "POST":  
-        try:   
             userid1 = request.form["user_id1"] 
             userid2 = request.form["user_id2"] 
             
@@ -166,10 +193,8 @@ def saveDetails_makeFriend():
             u1 = network.GetUser(int(userid1))
             u2 = network.GetUser(int(userid2)) 
             network.MakeFriend(u1,u2)
-            msg = "Friendship is successfully created!"
-        except:   
-            msg = "We can not create the friendship in the database" 
-        finally:  
+            friend_id = int(database.get_available_friend_id())
+            msg = "Friendship is successfully added! Friend ID is: " + str(friend_id - 1) 
             return render_template("success.html",msg = msg) 
 
 #unfriend page
@@ -181,8 +206,7 @@ def un_friend():
 @app.route("/savedetails_deleteFriend",methods = ["POST","GET"])  
 def saveDetails_deleteFriend():  
     msg = "msg" 
-    if request.method == "POST":  
-        try:   
+    if request.method == "POST":   
             userid1 = request.form["user_id1"] 
             userid2 = request.form["user_id2"] 
             
@@ -191,13 +215,30 @@ def saveDetails_deleteFriend():
             u2 = network.GetUser(int(userid2)) 
             network.UnFriend(u1,u2)
             msg = "Friendship is successfully deleted!"
-        except:   
-            msg = "We can not delete the friendship in the database" 
-        finally:  
+            return render_template("success.html",msg = msg) 
+
+#show all opinions page
+@app.route('/show_opinions')
+def show_opinions():
+    return render_template('show_Opinions.html')
+
+
+@app.route("/savedetails_showOpinions",methods = ["POST","GET"])  
+def saveDetails_showOpinions():  
+    msg = "" 
+    if request.method == "POST":
+            userid = request.form["userid"]   
+            list = database.get_opinions_for_user(userid)
+            for opinion in list:
+                msg += "|Category: " + str(opinion.category) + " Item: " + str(opinion.item) + " Rating:" + str(opinion.rating) + "|\n"
+            
+            if(msg == ""):
+                msg = "No opinions have been added for this user" 
+            
             return render_template("success.html",msg = msg) 
     
 #-----------------------------------------------------------------------
-#--------------------------Find Match--------------------------------------------
+#--------------------------Find Match and Find Friend--------------------------------------------
 
 #find match page
 @app.route('/find_match')
@@ -208,29 +249,54 @@ def find_match():
 @app.route("/savedetails_findMatch",methods = ["POST","GET"])  
 def saveDetails_findMatch():  
     msg = "msg" 
-    if request.method == "POST":  
-        try:   
+    if request.method == "POST":   
             userid1 = request.form["user_id1"] 
             category = request.form["category"] 
 
             #checking for right user inputs
-            if (category != "Movies" and category != "Sports" or category != "Travel" or category != "Music" or category != "Food"):
+            if (category != "Movies" and category != "Sports" and category != "Travel" and category != "Music" and category != "Food"):
                 raise ValueError
             
             #adding opinion to the network
             u1 = network.GetUser(int(userid1))
             list = network.FindMatch(u1,category)
-            #NEED TO WORK ON SHOWING BESTMATCH
-            msg = "Match is successfully found!"
-        except:   
-            msg = "We can not find a match in the database" 
-        finally:  
+            if(list == None):
+              msg = "Match was not found :( "
+              return render_template("success.html",msg = msg)   
+    
+            msg = "Match is successfully found: " + list 
+            return render_template("success.html",msg = msg) 
+
+
+#find friend page
+@app.route('/find_friend')
+def find_friend():
+    return render_template('Find_Friend.html')
+
+
+@app.route("/savedetails_findFriend",methods = ["POST","GET"])  
+def saveDetails_findFriend():  
+    msg = "" 
+    if request.method == "POST":
+            userid = request.form["userid"] 
+            u1 = network.GetUser(int(userid))
+            if(u1 == None):
+                msg = "UserId not found"
+                return render_template("success.html",msg = msg)
+             
+            msg += "User " + str((network.FindFriend(u1)).userID) + " is a friend we found for you!"
+            if(msg == ""):
+                msg = "No friend has been found :(" 
+            
             return render_template("success.html",msg = msg) 
 
 #---------------------------------------------------------------------------------
 
 #runs the application
 if __name__ == "__main__" :
+    database.delete_all_tables()
+    database.make_tables()
+    network = Network()
     app.run(debug = True)
 
 
