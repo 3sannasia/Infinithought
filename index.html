@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>Home page</title>
+    <link rel="stylesheet" type='text/css' href ="{{ url_for('static',filename='custom.css') }}">
+    </head>
+<body>
+    <header class= "header-section">
+        <ul type="None">
+
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('add_user') }}">Add User</a></li>
+            <li><a href="{{ url_for('delete_user') }}">Delete User</a></li>
+            <li><a href="{{ url_for('add_opinion') }}">Add Opinion</a></li>
+            <li><a href="{{ url_for('remove_opinion') }}">Remove Opinion</a></li>
+            <li><a href="{{ url_for('make_friend') }}">Make Friend</a></li>
+            <li><a href="{{ url_for('un_friend') }}">Un-Friend</a></li>
+            <li><a href="{{ url_for('find_match') }}">Find Match</a></li>
+            <li><a href="{{ url_for('show_users') }}">Show All Users</a></li>
+            <li><a href="{{ url_for('show_friends') }}">Show All Friends</a></li>
+            <li><a href="{{ url_for('show_opinions') }}">Show All Opinions</a></li>
+            <li><a href="{{ url_for('find_friend') }}">Find Friend</a></li>
+
+        </ul>
+    </header>
+
+</body>
+</html>
