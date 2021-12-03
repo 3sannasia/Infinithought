@@ -9,6 +9,7 @@ class Friend:
         self._friendId = int(fid)                         # Initializes the friendID of the Friend
         self._first = u1                                  # Initializes the source connection of the Friend edge to first user passed
         self._second = u2                                 # Initializes the destination of the connection of the Friend edge to the second user passed
+        self.FindProximity()                              # Calculates the proximity between the the two users connected by this "friend" edge
     
     # Returns array of the first and second user that are connected by this Friend object edge
     @property
