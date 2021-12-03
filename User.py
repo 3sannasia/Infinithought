@@ -11,7 +11,15 @@ class Opinion:
         self.item = str(item)           #initializing item data member of the opinion object
         self.rating = int(rating)       #initializing the rating data member of the opinion object
 
-
+ # Throws exception if rating < 0 or rating > 10
+        if rating < 0:
+            raise ValueError('Rating must be from 1-10')
+        if rating > 10:
+            raise ValueError('Rating must be from 1-10')
+        # Throws exception if category passed is invalid 
+        if category != "Movies" and category != "Music" and category != "Sports" and category != "Food" and category != "Travel":   
+            raise Exception('Category Invalid')
+            
 # Each node in the social network will be represented as a user object
 class User:
     def __init__(self, uid) -> None:
