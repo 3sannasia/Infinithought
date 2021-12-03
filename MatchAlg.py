@@ -9,14 +9,14 @@ import numpy as np
 
 class MatchAlgorithm:
 
-    def Length(graph:nx.Graph, u1:User, u2:User, category:str)->float:
+    def Length(self, graph:nx.Graph, u1:User, u2:User, category:str)->float:
         f:Friend = graph[u1][u2]["friend"]
         if (f.proximity[category] != 12.0):
             return f.proximity[category]
         return f.proximity["Default"]
 
 # Returns a dictionary where users are mapped against Dijkstra's Distance
-    def GetDijkstraList(graph:nx.Graph, category:str, current_user:User)->dict:
+    def GetDijkstraList(self, graph:nx.Graph, category:str, current_user:User)->dict:
         all_nodes:set = node_connected_component(graph, current_user)
         shortest_path = {}
         for node in all_nodes:
@@ -43,7 +43,7 @@ class MatchAlgorithm:
         del shortest_path[current_user]
         return shortest_path
 
-    def GetPotentialMatches(dijkstra_dict:dict, current_user:User, category:str)->list:
+    def GetPotentialMatches(self, dijkstra_dict:dict, current_user:User, category:str)->list:
         dijkstra_list = list(dijkstra_dict.items())
         dijkstra_list.sort(key = lambda x: x[1])
         matches = []
@@ -66,7 +66,7 @@ class MatchAlgorithm:
 
         return matches
 
-    def GetWeightedDict(dijkstra_dict:dict)->dict:
+    def GetWeightedDict(self, dijkstra_dict:dict)->dict:
         
         max_value = max(dijkstra_dict.values())
         
@@ -76,7 +76,7 @@ class MatchAlgorithm:
         
         return dijkstra_dict
 
-    def GetSumDict(weighted_dict:dict, potential_matches:list, category:str)->dict:
+    def GetSumDict(self, weighted_dict:dict, potential_matches:list, category:str)->dict:
         sum_dict = {}
         users = list(weighted_dict.keys())
         for match in potential_matches:
@@ -88,7 +88,7 @@ class MatchAlgorithm:
         
         return sum_dict
 
-    def GetBestMatch(sum_dict:dict)->list:
+    def GetBestMatch(self, sum_dict:dict)->list:
         matches = list(sum_dict.keys())
         best_match = None
         max_score = 0
@@ -104,7 +104,7 @@ class MatchAlgorithm:
         
         return best_match
 
-    def GetPotentialFriends(dijkstra_dict:dict, current_user:User, network:nx.Graph)->list:
+    def GetPotentialFriends(self, dijkstra_dict:dict, current_user:User, network:nx.Graph)->list:
         dijkstra_list = list(dijkstra_dict.items())
         dijkstra_list.sort(key = lambda x: x[1])
         current_user_friends:list = list(network.adj[current_user])
