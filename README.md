@@ -3,6 +3,8 @@ final-project-infinithought created by GitHub Classroom
 
 Hello, this is the final project for CS128.
 
+The proposed project will include creating a node-based social network on the Web using flask where *users* are connected by their *friend* relationship (friend class. A *user* will need to have at least one *friend* in the *network.* They will sign up with their given *opinions* on *categories* and be connected to a friend randomly to start off with. They will also have the option of adding/removing *friends* and interacting within the *network.* The *network* will enable *users* to be exposed to new *items* in a given *category* based on what other *users* in the *network* enjoy. We made our project using python. We hope to suggest new items from categories using the interests of the friends and friends of friends of the user node. 
+
 How to Build Our Project:
 Use a development environment like VSCode and make sure to install python from the link below:
 https://www.python.org/downloads/
