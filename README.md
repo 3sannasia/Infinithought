@@ -12,10 +12,10 @@ https://www.python.org/downloads/
 After copying the repository, setting up an IDE to run the program, and installing python you are almost ready to begin!
 
 The following libraries are utilized and must therefore be installed:
-1: First install pip so that these libraries can easily be insatlled
-2: pip3 install sqlite3
-3: pip3 install matplotlib
-4: pip3 install networkx
+1: First install pip so that these libraries can easily be installed
+2: pip3 install sqlite3 (for the database)
+3: pip3 install matplotlib (for printing out the social network)
+4: pip3 install networkx (library for easability of creating nodes and edges)
 
 To start, sign up on our website to place your opinions into a database used for our social network. These opinions of items in specific categories will help us recommend more items from these categories and find others with similar interests. 
 
